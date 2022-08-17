@@ -1,5 +1,6 @@
 # TAOverlay
-*(This readme is messy, and written at 4:30 AM, so get ready... This will eventually be updated and look pretty.)*
+*(This readme is messy, and written at 4:30 AM, so get ready... This will eventually be updated and look pretty.)*  
+If you're worried about it being hacky, I advise you to look away *right now*.
 
 A scoreoverlay made to connect to TournamentAssistant through a relay server.  
 
