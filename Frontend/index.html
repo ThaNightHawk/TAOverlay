@@ -1,0 +1,435 @@
+
+<html>
+	<head>
+		<title>1V1 Overlay</title>
+		<link href="https://fonts.googleapis.com/css?family=Exo+2&display=swap" rel="stylesheet">
+        <style>
+
+			/*FONT*/
+			@font-face {font-family: 'cuyabra_bold';src: url('Fonts/cuyabra_bold.woff2') format('woff2'),url('Fonts/cuyabra_bold.woff2') format('woff');font-weight: normal;font-style: normal;}
+			@font-face {font-family: 'cuyabra';src: url('Fonts/cuyabra.woff2') format('woff2'),url('Fonts/cuyabra.woff') format('woff');font-weight: normal;font-style: normal;}
+
+			/*MAIN BODY*/
+            body {
+                margin: 0;
+                overflow: hidden;
+            }
+
+			/*SONG*/
+			#songKey {
+				margin-top: -100px;
+				margin-left: 105px;
+				color: white;
+				font-size: 1.5em;
+				text-transform: uppercase;
+			}
+
+			#songName {
+				margin-top: -4px;
+				margin-left: 105px;
+				color: white;
+				font-size: 1.5em;
+				font-family: cuyabra_bold;
+			}
+
+			#songMapper {
+	    		margin-top: -4px;
+	    		margin-left: 105px;
+	    		color: white;
+				font-size: 1.5em;
+			}
+			
+
+			#songDiffs {
+	    		margin-top: 2px;
+	    		margin-left: 105px;
+			}
+
+			#songImage {
+				height: 95px;
+				width: 95px;
+			}
+
+			.songDatas {
+				font-family: cuyabra;
+				margin-top: 138px;
+				margin-left: 450px;
+				position: absolute;
+			}
+			
+			/* PLAYERS V2*/
+			
+			#playerCSSData {
+				font-family: cuyabra;
+				color: white;
+				display: block;
+				margin-top: -780px;
+			}
+			#playerName {
+				font-family: cuyabra_bold;
+				font-size: 32px;
+				font-style: oblique;
+			}
+			
+			#playerFlag {
+				position: absolute;
+				}
+			
+			#playerRank {
+				font-size: 22px;
+				text-align: center;
+			}
+
+			/*PLAYERS*/
+            .pfp {
+                float: left;
+                margin-left: 4px;
+                margin-top: 4px;
+                width: 60px;
+                height: 60px;
+				box-shadow: 1px 1px 0px 1px rgb(0 0 0 / 20%);
+				-moz-box-shadow: 1px 1px 0px 1px rgb(0 0 0 / 20%);
+				-o-box-shadow: 1px 1px 0px 1px rgb(0 0 0 / 20%);
+				-webkit-box-shadow: 1px 1px 0px 1px rgb(0 0 0 / 20%);
+                border-radius: 50%;
+            }
+
+            .player {
+                width: 960px;
+                height: 70px;
+                overflow: hidden;
+				background: rgba(0, 0, 0, 0.5);
+                transition: top 0.5s, left 0.5s, right 0.5s, bottom 0.5s;
+            }
+
+           	.name {
+                font-family: "Exo";
+                font-size: 24px;
+                margin-left: 74px;
+                width: calc(100% - 68px);
+                text-align: left;
+                margin-top: 5px;
+            }
+
+			.score {
+                color: white;
+                font-family: "Exo";
+                font-size: 2.0em;
+                text-align: left;
+                transition: opacity 0.4s;
+                margin-top: 14px;
+                margin-left: 81px;
+			}
+
+            .combo {
+                color: white;
+                font-family: "Exo";
+                font-size: 2.0em;
+                text-align: center;
+                margin-left: 9px;
+                margin-top: -69px;
+                transition: opacity 0.4s;
+            }
+
+            .accuracy {
+                color: white;
+                font-family: "Exo";
+                font-size: 2.0em;
+                text-align: right;
+                margin-right: 9px;
+                margin-top: -69px;
+                margin-bottom: 0;
+                transition: opacity 0.4s;
+            }
+
+			#Leaderboard {
+	    		margin-top: 765px;
+    			display: inline-flex;
+			}
+        </style>
+
+        <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+	<div class="player" id="PlayerTemplate" style="display: none">
+      	<img class="pfp" src="https://i.imgur.com/3KgARpG.png">
+      	<div class="Left">
+        <h2 class="score">0</h2>
+		</div>
+		<div class="Center">
+			<h2 class="combo">0x</h2>
+		</div>
+		<div class="Right">
+			<h2 class="accuracy">0.00%</h2>
+		</div>
+    </div>
+	<div id="Leaderboard"></div>
+
+
+	<div class="songDatas" id="songs" style="display: block">
+		<!--Image-->
+		<div><img id="songImage" class="songImage" src="./Images/noimg.png"/></div>
+		<div id="songKey"></div>
+		<div id="songName"></div>
+		<div id="songMapper"></div>
+		<div id="songDiff"><img id="songDiffs"/></div>
+		
+	</div>
+		<script>	
+
+
+					const QueryString = window.location.search;const urlParams = new URLSearchParams(QueryString);
+
+					var dumdum = urlParams.has('dm'); //If URL got 'dm', turn on 'dummyMode'
+					var dumdumamount = urlParams.get('pc') //returns 'pc' and sets amount of 'dummyPlayers' shown.
+
+					var dummyMode = dumdum; //Toggle dummies
+					var dummyPlayers = dumdumamount //Amount of dummies
+
+
+					//PLAYER DATA
+					var playerTemplate = document.getElementById("PlayerTemplate");
+					var leaderboardDiv = document.getElementById("Leaderboard");
+					var leaderboardData = {};
+
+					//PLAYER NAMES
+
+					//SONGDATA
+					async function getMap(LevelId, Diff) {
+						var songHash = LevelId.replace("custom_level_", "");
+						var songDiff = Diff;
+						fetch('https://api.beatsaver.com/maps/hash/'+songHash)
+						.then(response => response.json())
+						.then(data => {
+						document.getElementById("songKey").innerHTML = "KEY: "+data.id;
+						document.getElementById("songImage").src = data.versions[0].coverURL;
+						document.getElementById("songName").innerHTML = data.name;
+						document.getElementById("songMapper").innerHTML = data.metadata.levelAuthorName;
+						document.getElementById("songDiffs").src = "./Diffs/"+songDiff+".png";
+						});
+					}
+					//EMPTY MAP
+					function emptyMap(){
+						document.getElementById("songKey").innerHTML = "";
+						document.getElementById("songImage").src = "./Images/noimg.png";
+						document.getElementById("songName").innerHTML = "";
+						document.getElementById("songMapper").innerHTML = "";
+						document.getElementById("songDiffs").src = "";
+					}
+						
+			// PLAYER FUNCTIONS
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+			const numberFormatter = Intl.NumberFormat('en-US');
+
+            sortLeaderboard = function(){
+                var temp = [];
+                for (const [ key, value ] of Object.entries(leaderboardData)) {
+                    temp.push([key, value]);
+                }
+
+                temp.sort((a, b) => {
+                    return b[1] - a[1];
+                });
+
+                for (var i = 0; i < temp.length; i++) {
+                    var player = document.getElementById("Player"+temp[i][0]);
+                }
+                return temp;
+            }
+
+            slideInPlayers = async function(){
+                var temp = sortLeaderboard();
+                await sleep(380);
+                for (var i = 0; i < temp.length; i++) {
+                    await sleep(140);
+                    document.getElementById("Player"+temp[i][0]).style.left = "0px";
+                }
+            }
+
+            setPlayerData = async function(scoresaber_id, score, combo, accuracy, isVisible){
+                if (!(scoresaber_id in leaderboardData)) {
+                    return false;
+                }
+
+                if (isNaN(accuracy)) {
+                    accuracy = 0;
+                }
+				
+                let playerScore = document.getElementsByClassName("Score"+scoresaber_id)[0];
+                let playerCombo = document.getElementsByClassName("Combo"+scoresaber_id)[0];
+                let playerAcc = document.getElementsByClassName("Accuracy"+scoresaber_id)[0];
+				
+				var formattedScore = numberFormatter.format(score.toFixed(0))
+                playerScore.innerHTML = formattedScore;
+                playerCombo.innerHTML = combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "x";
+                playerAcc.innerHTML = accuracy.toFixed(2) + "%";
+                leaderboardData[scoresaber_id] = accuracy;
+            }
+
+            clearPlayers = async function(){
+                leaderboardData = {};
+
+                var playersWinners = document.getElementsByClassName("playerWinner");
+
+                for (var i = 0; i < playersWinners.length; i++) {
+                    playersWinners[playersWinners.length - i - 1].style.left = "-960px";
+                }
+
+                await sleep(510);
+
+                leaderboardDiv.innerHTML = '';
+            }
+
+            hidePlayerData = function(){
+                for (const [ key, value ] of Object.entries(leaderboardData)) {
+                    setPlayerData(key, 0, 0, 0, true);
+                }
+            }
+
+			makePlayer = function(scoresaber_id, order){
+        		fetch('https://new.scoresaber.com/api/player/'+scoresaber_id+'/full')
+        		.then(response => {return response.json()})
+
+						.then(data => {
+                    var newPlayer = playerTemplate.cloneNode(true);
+                    newPlayer.id = "Player" + scoresaber_id;
+                    var newPlayerPfp = newPlayer.getElementsByClassName("pfp")[0];
+                    newPlayerPfp.src = "https://new.scoresaber.com/api/static/avatars/"+scoresaber_id+".jpg";
+
+                    if (data.playerInfo.avatar == "/images/oculus.png") {newPlayerPfp.src = "https://i.imgur.com/3KgARpG.png";}
+					if (data.playerInfo.avatar == "/images/steam.png") {newPlayerPfp.src = "https://i.imgur.com/3KgARpG.png";}
+
+                    var newPlayerScore = newPlayer.getElementsByClassName("score")[0];
+                    newPlayerScore.classList.add("Score" + scoresaber_id);
+                    newPlayerScore.style.opacity = "1";
+					var newPlayerCombo = newPlayer.getElementsByClassName("combo")[0];
+					newPlayerCombo.classList.add("Combo" + scoresaber_id);
+                    newPlayerCombo.style.opacity = "1";
+                    var newPlayerAcc = newPlayer.getElementsByClassName("accuracy")[0];
+                    newPlayerAcc.classList.add("Accuracy" + scoresaber_id);
+                    newPlayerAcc.style.opacity = "1";
+                    newPlayer.style.display = "block";
+                    newPlayer.style.top = 1000 + order * 72 + "px";
+                    newPlayer.style.left = "-960px";
+                    newPlayer.classList.add('player');
+                    newPlayer.classList.add('playerWinner');
+                    leaderboardDiv.appendChild(newPlayer);
+
+                    leaderboardData[scoresaber_id] = 0;
+					
+					})
+
+					.catch(err => { console.log(err);	})
+        	}
+            
+			var TAsock = new WebSocket("ws://localhost:2223");
+            TAsock.onopen = function(event) {
+				console.log("WE ARE CONNECTED BOIS");
+			};
+
+			TAsock.onmessage = async function(event) {
+				jsonObj = JSON.parse(event.data);
+				if (jsonObj.Type == 1) { //Match Created
+					if (jsonObj.userid > 0) {
+					console.log(jsonObj.userid);
+					makePlayer(jsonObj.userid, jsonObj.order);
+					await sleep(600);
+					await slideInPlayers();					
+                    }}
+				if (jsonObj.Type == 2) // Match Deleted
+					{
+						await clearPlayers();
+						emptyMap();
+					}
+				if (jsonObj.Type == 3) // LevelChanged
+					{
+						var LevelId = jsonObj.LevelId;
+						var Diff = jsonObj.Diff;
+						getMap(LevelId, Diff);	
+					}
+				if (jsonObj.Type == 4) // LevelChanged
+					{		
+					 	var player = document.getElementById("Player" + jsonObj.playerId);
+					 		if (player) {
+								await setPlayerData(jsonObj.playerId,jsonObj.score,jsonObj.combo,jsonObj.acc * 100,jsonObj.visible)
+								sortLeaderboard();
+					 		} else {
+								makePlayer(jsonObj.playerId, 0);
+								await sleep(1000);
+								var player = document.getElementById("Player" + jsonObj.playerId);
+								player.style.left = "0px";
+					 		}
+					}
+			};
+
+            dummyPlayersList = [
+                "76561198075605706",
+                "76561198318835649",
+                "76561198218774185",
+                "76561198366737508",
+                "76561198166052112",
+                "76561198297215735",
+                "76561198156925313",
+                "76561198843522732",
+                "76561198120664513",
+                "76561198287102757",
+                "76561198086188514",
+                "76561198362134974",
+                "76561199066343560",
+                "76561198039889412",
+                "76561198294848728",
+                "76561198197748018",
+                "3117609721598571",
+                "76561197992369547",
+                "76561198161280516",
+                "76561198343235034",
+                "76561198083631499",
+                "76561198359072921",
+                "76561198065351707",
+                "76561198039718500",
+                "76561198089913211",
+                "76561198046397592",
+                "76561198452469046",
+                "76561198118927554",
+                "76561198400393482",
+                "76561198104292086",
+                "3529663747128402",
+                "76561198152446761",
+                "76561198951084364",
+                "76561198163644494",
+                "76561198255453360",
+                "3193873020628437",
+                "76561198130019724",
+                "76561198198217778",
+                "76561198036900510",
+                "3540593089314379",
+                "76561198447389713",
+                "76561198136806348",
+                "76561197997028786",
+                "76561198188430027",
+                "76561198030407451",
+                "76561198216194272",
+                "76561198217326316",
+                "76561198299618436",
+                "76561198004075539",
+                "76561197987841525",
+                "76561198086326146"
+            ]
+
+            if ( dummyMode ) {
+				getMap("custom_level_CFCDBD060AABC0673F4950506B5170CE59D963BC",0);
+                for (i=0; i<dummyPlayers; i++) {
+                    makePlayer(dummyPlayersList[i], i);
+                }
+                setTimeout(function(){
+                    slideInPlayers();
+                }, 600);
+
+            }
+		</script>
+</body>
+</html>
