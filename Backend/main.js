@@ -105,7 +105,8 @@ taWebsocket.taClient.on('matchDeleted', async (e) => {
 			sockets.send(JSON.stringify({'Type': '2'}));
 			//Here we unlock the backend.
 			InMatch = false;
-
+			//Here we reset the matchData-array for a new match.
+			matchData.length = 0;
 			console.log("Match deleted, backend unlocked.");
 		}
 });
@@ -128,9 +129,9 @@ taWebsocket.taClient.on('matchUpdated', (e) => {
 	}
 });
 
-taWebsocket.taClient.on('userUpdated', async (e) => {	
-	//Here we check if the user_id associated with the data recieved, is in matchData[>0<,0], and if it is, we continue.
-	if (matchData[0] == e.data.user_id || matchData[1] == e.data.user_id) {
+taWebsocket.taClient.on('userUpdated', async (e) => {
+	//Here we check if we're in a match, and the user_ids associated with the data recieved, is in matchData[>0<,0], and if it is, we continue.
+	if (inMatch && matchData[0] == e.data.user_id || matchData[1] == e.data.user_id) {
 		//Here we send the json-string to the relay-server. This contains: Player ID, Score, Combo and Acc.
 		sockets.send(JSON.stringify({'Type': '4','playerId': e.data.user_id,'score': e.data.score,'combo': e.data.combo,'acc':e.data.accuracy,'visible':true}));
 	}
