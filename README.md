@@ -1,8 +1,8 @@
 # TAOverlay
-*(This readme is messy, and written at 4:30 AM, so get ready... This will eventually be updated and look pretty.)*  
-If you're worried about it being hacky, I advise you to look away *right now*.
+*THIS HAS BEEN ARCHIVED AND WILL NOT RECIEVE FURTHER UPDATES*  
 
-A scoreoverlay made to connect to TournamentAssistant through a relay server.  
+A scoreoverlay made to connect to TournamentAssistant through a relay server. 
+(Yes, a relay server, as other Dane Saber tools connect to the overlay too)
 
 - More info can be read in `Backend/main.js`
 
